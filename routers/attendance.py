@@ -1,19 +1,19 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from database import get_db
 from schemas import ClassAttendanceData
-from crud import create_or_update_class, insert_attendance_data, update_student_class_mapping, update_meta_class_data
+from crud import (
+    create_or_update_class,
+    insert_attendance_data,
+    update_student_class_mapping,
+    update_meta_class_data,
+    extract_registration_number,
+    get_class_tables_for_student,
+    get_attendance_data,
+    truncate_attendance_data
+)
 
 router = APIRouter()
-
-from fastapi import APIRouter, Depends
-from sqlalchemy.orm import Session
-from crud import extract_registration_number, get_class_tables_for_student, get_attendance_data
-from database import get_db
-
-router = APIRouter()
-
-from fastapi import Request
 
 def get_current_user_email(request: Request):
     # For now, just return a hardcoded email for testing
@@ -38,24 +38,27 @@ def get_attendance(db: Session = Depends(get_db), email: str = Depends(get_curre
         "attendance": attendance_data
     }
 
-
 @router.post("/process_attendance/")
 def process_attendance(data: ClassAttendanceData, db: Session = Depends(get_db)):
-    # Create or update the class using the label
-    unique_class_name = create_or_update_class(db, data.fileName)
+    # Generate or fetch the class table name
+    class_table_name = create_or_update_class(db, data.fileName, data.fileId, data.ownerEmail)
+    
+    # Log the table name to debug
+    print(f"Processing attendance for table: {class_table_name}")
 
+    # Truncate the existing class table if it already exists
+    truncate_attendance_data(db, class_table_name)
+
+    # Insert attendance records
     for record in data.data:
         reg_number = record.reg
         present_days = record.pr
         absent_days = record.ab
 
-        # Insert attendance data into the unique class table
-        insert_attendance_data(db, unique_class_name, reg_number, present_days, absent_days)
+        insert_attendance_data(db, class_table_name, reg_number, present_days, absent_days)
+        update_student_class_mapping(db, reg_number, class_table_name)
 
-        # Update student_class_mapping with the correct class_id
-        update_student_class_mapping(db, reg_number, unique_class_name)
-
-    # Update the meta_class_data table with the last update time
-    update_meta_class_data(db, unique_class_name)
+    # Update meta_class_data
+    update_meta_class_data(db, data.fileId)
 
     return {"message": "Attendance data processed successfully."}

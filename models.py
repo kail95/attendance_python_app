@@ -9,7 +9,7 @@ class StudentClassMapping(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     reg_number = Column(String(255), nullable=False)
-    class_id = Column(String(255), nullable=False)
+    class_id = Column(Integer, nullable=False)
     added_date = Column(TIMESTAMP, default=datetime.utcnow)
 
 class MetaClassData(Base):
@@ -17,5 +17,7 @@ class MetaClassData(Base):
 
     class_id = Column(Integer, primary_key=True, autoincrement=True)
     class_label = Column(String(255))  # Original provided name
-    unique_class_name = Column(String(255), unique=True)  # Generated unique name
+    class_table_name = Column(String(255), unique=True)  # Generated unique class table name
+    class_file_id = Column(String(255), unique=True)  # File ID of the Google Sheet
+    dep_name = Column(Integer)  # Department name as an integer (e.g., 1 for 'attendance.ab@agri.pdn.ac.lk')
     last_updated = Column(TIMESTAMP, default=datetime.utcnow, onupdate=datetime.utcnow)
