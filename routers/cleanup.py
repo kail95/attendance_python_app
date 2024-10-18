@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import get_db
-from crud import cleanup_old_class_data, cleanup_old_student_mappings
+from crud.cleanup_data_crud import cleanup_old_class_data, cleanup_old_student_mappings
 
 router = APIRouter()
 
