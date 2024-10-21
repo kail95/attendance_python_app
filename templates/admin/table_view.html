@@ -1,0 +1,27 @@
+{% extends "admin/admin_base.html" %}
+
+{% block content %}
+    <h3>{{ active_class_label }}</h3>
+    <div id="class-table">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Reg Number</th>
+                    <th>Student Name</th>
+                    <th>Present Days</th>
+                    <th>Absent Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ student.reg_number }}</td>
+                    <td>{{ student.student_name }}</td>
+                    <td>{{ student.present_days }}</td>
+                    <td>{{ student.absent_days }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

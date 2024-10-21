@@ -6,7 +6,10 @@ from starlette.middleware.sessions import SessionMiddleware
 from config import settings
 
 # Initialize FastAPI
-app = FastAPI()
+app = FastAPI(debug=True)
+
+# Add the session middleware
+app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
 
 # Create the database tables if they don't already exist
 Base.metadata.create_all(bind=engine)
@@ -20,8 +23,7 @@ app.include_router(add_attendance.router, prefix="/input", tags=["Input"])
 # app.include_router(cleanup.router)
 app.include_router(admins.router, prefix="/admin", tags=["Admin"])
 
-# Add the session middleware
-app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+
 
 # Root endpoint
 @app.get("/")

@@ -1,0 +1,53 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}
+    {{ active_class_label }} - Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<style>
+/* Custom class for the selected button */
+.active-button {
+    background-color: #007bff !important;  /* Change the background color */
+    color: white !important;               /* Change text color */
+    border-color: #007bff !important;      /* Ensure border matches */
+}
+
+/* Ensure hover state for selected button looks distinct */
+.active-button:hover {
+    background-color: #0056b3 !important;
+    border-color: #0056b3 !important;
+}
+
+/* Add hover styles for non-selected buttons */
+.list-group-item:hover {
+    background-color: #f8f9fa; /* Light gray for hover */
+}
+</style>
+
+<div class="row" x-data="{ selectedClass: '{{ active_class_label }}' }">
+    <div class="col-md-3 px-2 mt-1 mb-3">
+        <div class="list-group">
+            {% for class in classes %}
+            <a href="/admin/view_table/{{ class[2] }}"
+               hx-get="/admin/view_table/{{ class[2] }}"
+               hx-target="#class-content"
+               hx-swap="outerHTML"
+               x-on:click="selectedClass = '{{ class[1] }}'"
+               class="list-group-item list-group-item-action"
+               :class="{'active-button': selectedClass === '{{ class[1] }}'}">
+                {{ class[1] }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div id="class-content">
+            {% include "admin/partial_table.html" %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

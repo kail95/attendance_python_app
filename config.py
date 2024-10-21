@@ -19,8 +19,8 @@ class Settings(BaseSettings):
     GOOGLE_REDIRECT_URI: str = os.getenv("GOOGLE_REDIRECT_URI")
 
     # JWT and security settings
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "your_secret_key")
-    ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
+    SECRET_KEY: str = os.getenv("SECRET_KEY")
+    ALGORITHM: str = os.getenv("ALGORITHM")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
     # Nested Google OAuth config for better structure
