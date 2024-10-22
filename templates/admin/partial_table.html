@@ -1,21 +1,24 @@
 <div id="class-content">
     <h3>{{ active_class_label }}</h3> <br>
-    <table class="table table-striped">
+    <table class="table">
         <thead>
             <tr>
                 <th>Reg Number</th>
                 <th>Student Name</th>
                 <th>Present Days</th>
                 <th>Absent Days</th>
+                <th>Attendance %</th> 
             </tr>
         </thead>
         <tbody>
             {% for student in students %}
-            <tr>
+            {% set attendance_percentage = (student.present_days / (student.present_days + student.absent_days)) * 100 %}
+            <tr class="{% if attendance_percentage < 80 %}table-danger{% endif %}"> <!-- Apply pink color if attendance is below 80% -->
                 <td>{{ student.reg_number }}</td>
                 <td>{{ student.student_name }}</td>
                 <td>{{ student.present_days }}</td>
                 <td>{{ student.absent_days }}</td>
+                <td>{{ "%.2f"|format(attendance_percentage) }}%</td> <!-- Display attendance percentage -->
             </tr>
             {% endfor %}
         </tbody>

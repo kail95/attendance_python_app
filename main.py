@@ -9,7 +9,8 @@ from config import settings
 app = FastAPI(debug=True)
 
 # Add the session middleware
-app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY)
+app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY, session_cookie="session",  # Name of the session cookie           
+)
 
 # Create the database tables if they don't already exist
 Base.metadata.create_all(bind=engine)
@@ -19,18 +20,13 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Include the routers
 app.include_router(add_attendance.router, prefix="/input", tags=["Input"])
-# app.include_router(students.router)
+app.include_router(students.router, prefix="", tags=["Student"])
 # app.include_router(cleanup.router)
 app.include_router(admins.router, prefix="/admin", tags=["Admin"])
 
 
 
 # Root endpoint
-@app.get("/")
-def root():
-    return {"message": "Attendance Management System is running!"}
-
-
-
-
-# At this moment. run ngrok on 8000 & it redirects fine, but can't authenticated correctly. change google auth domain with ngrok's domain
+# @app.get("/")
+# def root():
+#     return {"message": "Attendance Management System is running!"}

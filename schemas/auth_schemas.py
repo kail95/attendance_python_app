@@ -6,7 +6,7 @@ class AdminCreate(BaseModel):
     is_super_admin: bool = False  # Default to non-super admin
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
