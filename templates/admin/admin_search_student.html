@@ -1,0 +1,37 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}
+    Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 mt-3 py-2 px-5" style="background-color: rgb(165, 165, 209);">
+        <form id="search-form" hx-post="/admin/search_student" hx-target="#results-table" hx-swap="innerHTML">
+            <div class="row align-items-center">
+                <!-- Label -->
+                <div class="col-auto">
+                    <label for="reg_number" class="form-label">Registration Number</label>
+                </div>
+        
+                <!-- Input Field -->
+                <div class="col">
+                    <input type="text" class="form-control" id="reg_number" name="reg_number" placeholder="Enter registration number" required>
+                </div>
+        
+                <!-- Search Button -->
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results Table (dynamically loaded by HTMX) -->
+<div id="results-table" class="row justify-content-center mt-4">
+    <!-- HTMX will insert the table content here -->
+</div>
+
+{% endblock %}

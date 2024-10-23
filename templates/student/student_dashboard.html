@@ -1,0 +1,36 @@
+{% extends "student/student_base.html" %}
+
+{% block title %}
+    Attendance Records
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-md-9 mx-auto">
+        <table class="table table-bordered mt-3">
+            <thead class="table-primary">
+                <tr>
+                    <th>Class Name</th>
+                    <th>Present Days</th>
+                    <th>Absent Days</th>
+                    <th>Attendance %</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                {% set total_days = record.present_days + record.absent_days %}
+                {% set attendance_percentage = (record.present_days / total_days) * 100 if total_days > 0 else 0 %}
+                <tr {% if attendance_percentage < 80 %} class="table-danger" {% endif %}> <!-- Pink for attendance < 80 -->
+                    <td>{{ record.class_name }}</td>
+                    <td>{{ record.present_days }}</td>
+                    <td>{{ record.absent_days }}</td>
+                    <td>{{ "%.2f"|format(attendance_percentage) }}%</td>  <!-- Format attendance percentage to 2 decimal places -->
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
