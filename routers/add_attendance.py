@@ -12,7 +12,7 @@ from crud.insert_data_crud import (
 
 router = APIRouter()
 
-@router.post("/process_attendance/")
+@router.post("/process_attendance")
 def process_attendance(data: ClassAttendanceData, db: Session = Depends(get_db)):
     try:
         # Generate or fetch the class table name

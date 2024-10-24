@@ -14,8 +14,17 @@ from database import get_db
 from utils.regno import generate_registration_number
 from fastapi.middleware.cors import CORSMiddleware
 
+
+# Disable Swagger docs on Production 
+enable_docs = False
+
 # Initialize FastAPI
-app = FastAPI(debug=True)
+app = FastAPI(
+    debug=True,
+    docs_url="/docs" if enable_docs else None,
+    redoc_url="/redoc" if enable_docs else None,
+    openapi_url="/openapi.json" if enable_docs else None
+)
 
 # Allow CORS for all origins
 app.add_middleware(
@@ -113,4 +122,3 @@ async def unified_callback(request: Request, db: Session = Depends(get_db)):
             </body>
         </html>
         """, status_code=500)
-
