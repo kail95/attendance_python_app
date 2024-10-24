@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     DB_PORT: str = os.getenv("DB_PORT", "3306")
     DB_USER: str = os.getenv("DB_USER", "root")
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "")
-    DB_NAME: str = os.getenv("DB_NAME", "attendance_Data_db")
+    DB_NAME: str = os.getenv("DB_NAME", "attendance_data_db")
 
     # Google OAuth settings
     GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID")

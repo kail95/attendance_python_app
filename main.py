@@ -12,9 +12,19 @@ from sqlalchemy import text
 from models.models import Admin
 from database import get_db
 from utils.regno import generate_registration_number
+from fastapi.middleware.cors import CORSMiddleware
 
 # Initialize FastAPI
 app = FastAPI(debug=True)
+
+# Allow CORS for all origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods
+    allow_headers=["*"],  # Allow all headers
+)
 
 # Add the session middleware
 app.add_middleware(SessionMiddleware, secret_key=settings.SECRET_KEY, session_cookie="session",  # Name of the session cookie           
